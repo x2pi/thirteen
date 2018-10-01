@@ -2,6 +2,7 @@
   <div class="text-xs-center">
     <div v-if="login" >
       <v-btn color="error"class = "mt-3" >Gam tiến lên</v-btn>
+	  <v-btn href="#" class = 'mt-3' onclick="signOut();">Sign out</v-btn>
     </div>
       <div v-else>
         <button id = "my-signin2" class="mt-3" ></button>
@@ -24,6 +25,7 @@ export default {
 
   methods: {
     async addGoogleApi () {
+	let that = this
       let metaClientId = document.createElement('meta')
       metaClientId.setAttribute('name', 'google-signin-client_id')
       metaClientId.setAttribute('content', '569063036843-v7f9qvobmakicec5c0idjoq8vd4p6iof.apps.googleusercontent.com')
@@ -36,11 +38,19 @@ export default {
         console.log('Logged in as: ' + googleUser.getBasicProfile().getName())
         let idToken = googleUser.getAuthResponse().id_token
         const response = await Login.sendIdToken(idToken)
+		if(response.data.email) that.login = true;
         console.log(response.data)
       }
       window.onFailure = function (error) {
         console.log(error)
       }
+	 window.signOut = function () {
+		var auth2 = gapi.auth2.getAuthInstance();
+			auth2.signOut().then(function () {
+			console.log('User signed out.');
+		});
+		location.reload();
+	}
       window.renderButton = function () {
         gapi.signin2.render('my-signin2', {
           'scope': 'profile email',

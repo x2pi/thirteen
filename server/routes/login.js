@@ -21,6 +21,7 @@ const isExist = async email => {
  }
 
 export const login = async (ctx, next) => {
+	console.log (ctx.session.user)
 	var token = ctx.request.body.idToken
 	var url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token='+ token;
 	var data = await getProfile(url)
@@ -29,6 +30,8 @@ export const login = async (ctx, next) => {
 		if(i){
 			const email = data.email
 			const user = await User.findOne({ email })
+			ctx.body = data
+			ctx.session.user = user._id
 		}else{
 			
 			const user = new User({
@@ -36,9 +39,12 @@ export const login = async (ctx, next) => {
 					name: data.name
 					})
 			await user.save()
+			user = await User.findOne({ email })
+			ctx.body = data 
+			ctx.session.user = user._id
 		}
 	}else{
 		ctx.body = 'Đăng nhập lỗi'
 	}
-	ctx.body = data 
+	
 }
