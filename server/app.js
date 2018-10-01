@@ -40,24 +40,12 @@ const CONFIG = {
 };
 
 app.use(session(CONFIG, app));
-// or if you prefer all default config, just use => app.use(session(app));
-/*
-app.use(ctx => {
-  // ignore favicon
-  if (ctx.path === '/favicon.ico') return;
-
-  let n = ctx.session.views || 0;
-  ctx.session.views = ++n;
-  ctx.body = n + ' views';
-});
-*/
 
 router.post('/users', (ctx, next) => {
 	console.log(ctx.request.body);
 	
   let n = ctx.session.views || 0;
   ctx.session.views = ++n;
-  ctx.body = n + ' views';
   ctx.body = { foo: 'bar' , views : n}
 
 });
@@ -65,6 +53,10 @@ router.post('/users', (ctx, next) => {
 app
   .use(router.routes())
   .use(router.allowedMethods());
+  
+import page from './routes'
+ 
+app.use(page.routes())
 
 app.listen(8081);
 console.log('listening on port 8081');
