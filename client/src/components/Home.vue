@@ -1,7 +1,7 @@
 <template>
   <div class="text-xs-center">
     <div v-if="login" >
-      <v-btn color="error"class = "mt-3" >Gam tiến lên</v-btn>
+      <v-btn color="error" class = "mt-3" >Gam tiến lên</v-btn>
 	  <v-btn href="#" class = 'mt-3' onclick="signOut();">Sign out</v-btn>
     </div>
       <div v-else>
@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import Login from '@/services/Login'
+import Login from '../services/Login.js'
 
 export default {
   data () {
